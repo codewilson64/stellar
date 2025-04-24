@@ -1,0 +1,24 @@
+{
+    "burgers": [
+      {
+        "id": 0,
+        "title": "Rich Dad Poor Dad"
+      },
+      {
+        "id": 1,
+        "title": "Irrational Exuberance"
+      },
+      {
+        "id": 2,
+        "title": "Money Master The Game"
+      },
+      {
+        "id": 3,
+        "title": "The Goal"
+      },
+      {
+        "id": 4,
+        "title": "Travel For Free"
+      }
+    ]
+  }
