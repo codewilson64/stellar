@@ -4,6 +4,7 @@ import { Link } from 'expo-router';
 import logo from '../assets/icons/logo.png'
 
 const OnboardingScreen = () => {
+
   return (
     <View className='flex-1 justify-between items-center bg-blackPearl px-6 py-12'>
      
@@ -21,7 +22,7 @@ const OnboardingScreen = () => {
       
       {/* Bottom Button */}
       <Link 
-        href='/signup' 
+        href='/home' 
         className='bg-[#13a2f5] items-center w-full py-5 px-4 rounded-xl'
       >
         <Text className='text-white text-lg text-center font-semibold'>Get started</Text>

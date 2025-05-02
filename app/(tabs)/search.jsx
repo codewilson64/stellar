@@ -1,5 +1,4 @@
 import { View, Text, Pressable, ScrollView, Image } from 'react-native'
-import SearchBar from '../../components/SearchBar'
 import { Categories } from '../../constants/category'
 import { useRouter } from 'expo-router'
 
@@ -8,12 +7,10 @@ const SearchPage = () => {
 
   return (
     <View className='flex-1 bg-blackPearl'>
-      <SearchBar />
-
 
       <ScrollView 
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: 20}}
+        contentContainerStyle={{paddingBottom: 20, paddingTop: 20}}
       >
         <View className='px-5'>
           <Text className='text-2xl text-white font-bold mt-3 mb-5'>I want to learn about</Text>

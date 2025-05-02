@@ -13,11 +13,10 @@ const BookCategory= () => {
         const response = await fetch('https://codewilson64.github.io/book-cover-api/book.json')
         const data = await response.json()
         
-         // Find book - loosely compare to allow string/number mismatch
         const booksInCategory = data.filter(item => item.category === category) 
         
         if(booksInCategory.length > 0) {
-          console.log('Book Category found', booksInCategory)
+          // console.log('Book Category found', booksInCategory)
           setBooks(booksInCategory)
         } else {
           console.log('No books found for category:', category)
@@ -40,7 +39,7 @@ const BookCategory= () => {
   }
 
   return (
-    <View className='flex-1 bg-blackPearl p-5'>
+    <View className='flex-1 w-full bg-blackPearl p-5'>
       <Text className='text-2xl text-white font-bold mb-4'>
         {category}
       </Text>

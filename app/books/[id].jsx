@@ -2,16 +2,19 @@ import { View, Text, Image, ScrollView, Pressable } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useContext, useEffect, useState } from 'react'
 
+import { BookmarkContext } from '../../context/BookmarkContext'
+import { RevenueCatContext } from '../../context/RevenueCatContext'
+
 import bookmark from '../../assets/icons/bookmark.png'
 import close from '../../assets/icons/close.png'
-import { BookmarkContext } from '../../context/BookmarkContext'
 
 const BookDetails = () => {
   const [book, setBook] = useState(null)
   const router = useRouter()
   const { id } = useLocalSearchParams()
-
+  const { customerInfo } = useContext(RevenueCatContext)
   const { bookmarkedBooks, toggleBookmark } = useContext(BookmarkContext)
+
   const isBookmarked = book && bookmarkedBooks.some(b => b.id === book.id)
 
   useEffect(() => {
@@ -24,7 +27,7 @@ const BookDetails = () => {
         const bookDetails = data.find(item => item.id == id) 
         
         if(bookDetails) {
-          console.log('Book found', bookDetails)
+          // console.log('Book found', bookDetails)
           setBook(bookDetails)
         } else {
           console.log('Book not found')
@@ -50,9 +53,9 @@ const BookDetails = () => {
     <View className='flex-1 bg-blackPearl'>
       <ScrollView contentContainerStyle={{paddingBottom: 0}}>
 
-        <View className='relative mt-8 mb-6 mx-auto'>  
+        <View className='flex-row justify-between w-full px-5 mt-8 mb-6'>  
           <Pressable onPress={router.back}>
-            <Image source={close} style={{tintColor: 'white'}} className='size-8 absolute top-0 -left-20'/>          
+            <Image source={close} style={{tintColor: 'white'}} className='size-8'/>          
           </Pressable>
 
           <Image 
@@ -61,7 +64,7 @@ const BookDetails = () => {
             resizeMode='cover'
           />
 
-          <Pressable onPress={() => toggleBookmark(book)} className='absolute top-0 -right-20'>
+          <Pressable onPress={() => toggleBookmark(book)}>
             <Image 
               source={bookmark} 
               style={{ tintColor: isBookmarked ? '#0096ff' : 'white'}} 
@@ -81,7 +84,17 @@ const BookDetails = () => {
           <Text className='text-lg text-gray-300'>{book.description}</Text>
         </View>
 
-        <Pressable onPress={() => router.push(`summary/${book.id}`)} className='bg-zinc-800 items-center w-40 border border-gray-400/60 mx-auto py-5 px-4 rounded-xl'>
+        <Pressable 
+          onPress={() => {
+            const hasAccess = customerInfo?.entitlements?.active?.premium_access
+            if(hasAccess) {
+              router.push(`/summary/${book.id}`)
+            } else {
+              router.push('/paywall')
+            }
+          }}
+          className='bg-zinc-800 items-center w-40 border border-gray-400/60 mx-auto py-5 px-4 mb-10 rounded-xl'
+        >
           <Text className='text-white text-lg font-semibold'>Start reading</Text>
         </Pressable>
 

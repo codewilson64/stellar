@@ -4,12 +4,13 @@
     "name": "stellar-app",
     "slug": "stellar-app",
     "version": "1.0.0",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,10 +18,7 @@
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+      "package": "com.codewilson64.stellarapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -28,6 +26,9 @@
     "plugins": [
       "expo-router"
     ],
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
     "extra": {
       "router": {
         "origin": false
@@ -35,6 +36,7 @@
       "eas": {
         "projectId": "51596189-60b8-4065-8057-f9ef940a7c67"
       }
-    }
+    },
+    "owner": "codewilson64"
   }
 }

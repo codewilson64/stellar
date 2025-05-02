@@ -16,7 +16,7 @@ const SummaryDetails = () => {
         const summaryDetails = data.find(item => item.id == id) 
         
         if(summaryDetails) {
-          console.log('Summary found', summaryDetails)
+          // console.log('Summary found', summaryDetails)
           setSummary(summaryDetails)
         } else {
           console.log('Summary not found')
