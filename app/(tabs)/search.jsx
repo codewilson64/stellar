@@ -19,7 +19,7 @@ const SearchPage = () => {
         <View className='flex-col gap-4 px-5'>
         {Categories.map((item) => (
           <Pressable key={item.id} onPress={() => router.push(`category/${item.category}`)}>
-            <View className='flex-row items-center gap-6 w-full p-10 border border-gray-400/60 bg-zinc-800 rounded-xl'>
+            <View className='flex-row items-center gap-6 w-full p-9 border border-gray-400/60 rounded-xl'>
               <Image 
                 source={item.icon} 
                 className='size-8' 

@@ -1,12 +1,15 @@
 import { createContext, useEffect, useState } from "react";
 import { account } from '../lib/appwrite'
 import { ID } from "react-native-appwrite";
+import { useRouter } from "expo-router";
 
 export const AuthContext = createContext()
 
 export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState(null)
+    const router = useRouter()
 
+    // login
     const login = async (email, password) => {
        try {
         await account.createEmailPasswordSession(email, password)
@@ -25,6 +28,7 @@ export const AuthContextProvider = ({ children }) => {
       }
     }
 
+    // signup
     const signup = async (email, password) => {
       try {
         await account.create(ID.unique(), email, password)
@@ -48,10 +52,11 @@ export const AuthContextProvider = ({ children }) => {
         throw new Error(message)
       }
     }
-
+     // logout
     const logout = async () => {
       await account.deleteSession("current")
       setUser(null)
+      router.push('/login')
     }
 
     const getInitialUserValue = async () => {

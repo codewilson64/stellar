@@ -4,13 +4,13 @@ import AuthUserOnly from '../../components/auth/AuthUserOnly'
 
 const DashboardLayout = () => {
   return (
-    <AuthUserOnly>
       <Tabs 
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
             backgroundColor: '#181818',
-            height: 60,
+            borderColor: 'rgba(75, 85, 99, 0.5)',
+            height: 55,
           }
         }}
       >
@@ -26,7 +26,7 @@ const DashboardLayout = () => {
         />
         <Tabs.Screen 
           name='search'
-          options={{title: 'Search', tabBarIcon: ({focused}) => (
+          options={{title: 'Explore', tabBarIcon: ({focused}) => (
             <Ionicons 
               size={24}
               name={focused ? 'search' : 'search-outline'}
@@ -36,16 +36,15 @@ const DashboardLayout = () => {
         />
         <Tabs.Screen 
           name='saved'
-          options={{title: 'Saved', tabBarIcon: ({focused}) => (
+          options={{title: 'Library', tabBarIcon: ({focused}) => (
             <Ionicons
               size={24}
-              name={focused ? 'heart' : 'heart-outline'}
+              name={focused ? 'bookmark' : 'bookmark-outline'}
               color={focused ? '#0096ff' : 'gray'}
             />
           )}}
       />
       </Tabs>
-    </AuthUserOnly>
   )
 }
 

@@ -27,6 +27,7 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="stellar"/>
         <data android:scheme="com.codewilson64.stellarapp"/>
+        <data android:scheme="exp+stellar-app"/>
       </intent-filter>
     </activity>
   </application>

@@ -1,60 +1,66 @@
-import { View, Text, FlatList, Pressable, Image } from 'react-native'
+import { View, Text, FlatList, Pressable, Image, ActivityIndicator } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { BooksContext } from '../../context/BooksContext'
+import { Dimensions } from 'react-native'
+
+import arrow from '../../assets/icons/arrow.png'
 
 const BookCategory= () => {
   const [books, setBooks] = useState([])
   const router = useRouter()
   const { category } = useLocalSearchParams()
 
+  const { fetchCategory } = useContext(BooksContext)
+
+  const screenWidth = Dimensions.get('window').width
+  const itemSpacing = 20
+  const horizontalPadding = 30 // paddingLeft + paddingRight (e.g., 20 + 20)
+  const itemWidth = (screenWidth - horizontalPadding - itemSpacing) / 2
+
   useEffect(() => {
-    const getBookCategory = async () => {
-      try {
-        const response = await fetch('https://codewilson64.github.io/book-cover-api/book.json')
-        const data = await response.json()
-        
-        const booksInCategory = data.filter(item => item.category === category) 
-        
-        if(booksInCategory.length > 0) {
-          // console.log('Book Category found', booksInCategory)
-          setBooks(booksInCategory)
-        } else {
-          console.log('No books found for category:', category)
-        }
-      } 
-      catch (error) {
-        console.error('Error fetching book category:', error)
-      }    
+    const loadCategory = async () => {
+      const data = await fetchCategory(category)
+      setBooks(data)
     }
 
-    if(category) {
-      getBookCategory()
-    }
+    loadCategory()
   }, [category])
 
   if(!books) {
     return (
-      <Text>Loading...</Text>
-    )
+      <ActivityIndicator size="large" className='flex-1 justify-center'/>
+    ) 
   }
 
   return (
-    <View className='flex-1 w-full bg-blackPearl p-5'>
-      <Text className='text-2xl text-white font-bold mb-4'>
-        {category}
-      </Text>
+    <View className='flex-1 w-full bg-blackPearl'>
+      <View className='flex-row items-center gap-4 px-5 py-5'>
+        <Pressable onPress={router.back}>
+          <Image source={arrow} style={{tintColor: 'gray'}} className='size-6'/>          
+        </Pressable>
+
+        <Text className='text-2xl text-white font-bold'>
+          {category}
+        </Text>
+      </View>
+      
       <FlatList
         data={books}
         numColumns={2}
         columnWrapperStyle={{
-          justifyContent: 'flex-start',
+          justifyContent: 'center',
           gap: 20
         }}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <Pressable onPress={() => router.push(`/books/${item.id}`)} className='mb-5'>
-            <Image source={{ uri: item.image }} className='w-[12rem] h-[18rem] rounded-lg mb-2' />
+            <Image 
+              source={{ uri: item.image }} 
+              style={{ width: itemWidth, height: itemWidth * 1.5 }}
+              className='rounded-lg mb-2' 
+            />
             <Text 
               className='text-white w-40 font-bold'
               numberOfLines={1} 

@@ -91,7 +91,7 @@ android {
         applicationId 'com.codewilson64.stellarapp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
+        versionCode 1
         versionName "1.0.0"
     }
     signingConfigs {

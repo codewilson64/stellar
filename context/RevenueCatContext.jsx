@@ -35,9 +35,12 @@ export const RevenueCatProvider = ({ children }) => {
     try {
       const { customerInfo } = await Purchases.purchasePackage(pkg);
       setCustomerInfo(customerInfo);
-      
-    } catch (e) {
+
+      return customerInfo
+    } 
+    catch (e) {
       console.warn('Purchase failed:', e);
+      throw e
     }
   };
 

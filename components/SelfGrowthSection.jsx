@@ -1,33 +1,27 @@
 import { View, Text, FlatList, Pressable, Image } from 'react-native'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'
+import { BooksContext } from '../context/BooksContext'
 
 const SelfGrowthSection = () => {
   const [books, setBooks] = useState([])
   const router = useRouter()
+  const { fetchRandomCategory } = useContext(BooksContext)
 
   useEffect(() => {
-      const getBookCategory = async () => {
-        try {
-          const response = await fetch('https://codewilson64.github.io/book-cover-api/book.json')
-          const data = await response.json()
-          
-          const booksInCategory = data.filter(item => item.category === "Self-Growth") 
-          
-          if(booksInCategory.length > 0) {
-            console.log('Book Category found', booksInCategory)
-            setBooks(booksInCategory)
-          } else {
-            console.log('No books found for category:', category)
-          }
-        } 
-        catch (error) {
-          console.error('Error fetching Self-Growth section:', error)
-        }    
-      }
+    const loadCategory = async () => {
+      const data = await fetchRandomCategory("Self-Growth")
+      setBooks(data)
+    }
 
-      getBookCategory()
-    }, [])
+    loadCategory()
+  }, [])
+
+  if(!books) {
+      return (
+        <ActivityIndicator size="large" className='flex-1 justify-center'/>
+      )
+    }
 
   return (
     <View className='mb-10'>
@@ -42,7 +36,7 @@ const SelfGrowthSection = () => {
               <Pressable onPress={() => router.push(`books/${item.id}`)} className={`ml-5 ${index === books.length - 1 ? 'mr-5' : 'mr-0'}`}>
                 <Image 
                   source={{uri: item.image}} 
-                  className='w-44 h-64 rounded-lg mb-3' 
+                  className='w-40 h-60 rounded-lg mb-3' 
                   resizeMode='cover'
                 />
                 <Text 

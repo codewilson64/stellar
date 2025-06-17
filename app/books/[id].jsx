@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, Pressable } from 'react-native'
+import { View, Text, Image, ScrollView, Pressable, ActivityIndicator } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useContext, useEffect, useState } from 'react'
 
@@ -7,45 +7,31 @@ import { RevenueCatContext } from '../../context/RevenueCatContext'
 
 import bookmark from '../../assets/icons/bookmark.png'
 import close from '../../assets/icons/close.png'
+import { BooksContext } from '../../context/BooksContext'
 
 const BookDetails = () => {
   const [book, setBook] = useState(null)
-  const router = useRouter()
   const { id } = useLocalSearchParams()
+  const router = useRouter()
+
+  const { fetchSingleBook } = useContext(BooksContext)
   const { customerInfo } = useContext(RevenueCatContext)
   const { bookmarkedBooks, toggleBookmark } = useContext(BookmarkContext)
 
   const isBookmarked = book && bookmarkedBooks.some(b => b.id === book.id)
 
   useEffect(() => {
-    const getBookDetails = async () => {
-      try {
-        const response = await fetch('https://codewilson64.github.io/book-cover-api/book.json')
-        const data = await response.json()
-        
-         // Find book - loosely compare to allow string/number mismatch
-        const bookDetails = data.find(item => item.id == id) 
-        
-        if(bookDetails) {
-          // console.log('Book found', bookDetails)
-          setBook(bookDetails)
-        } else {
-          console.log('Book not found')
-        }
-      } 
-      catch (error) {
-        console.error('Error fetching book details:', error)
-      }    
+    const loadBook = async () => {
+      const data = await fetchSingleBook(id)
+      setBook(data)
     }
 
-    if(id) {
-      getBookDetails()
-    }
+    loadBook()
   }, [id])
 
   if(!book) {
     return (
-      <Text>Loading...</Text>
+      <ActivityIndicator size="large" className='flex-1 justify-center bg-blackPearl'/>
     )
   }
 
@@ -55,7 +41,7 @@ const BookDetails = () => {
 
         <View className='flex-row justify-between w-full px-5 mt-8 mb-6'>  
           <Pressable onPress={router.back}>
-            <Image source={close} style={{tintColor: 'white'}} className='size-8'/>          
+            <Image source={close} style={{tintColor: 'gray'}} className='size-8'/>          
           </Pressable>
 
           <Image 
@@ -67,7 +53,7 @@ const BookDetails = () => {
           <Pressable onPress={() => toggleBookmark(book)}>
             <Image 
               source={bookmark} 
-              style={{ tintColor: isBookmarked ? '#0096ff' : 'white'}} 
+              style={{ tintColor: isBookmarked ? '#0096ff' : 'gray'}} 
               className='size-7'
             />
           </Pressable>
@@ -75,7 +61,7 @@ const BookDetails = () => {
 
         <View className='flex-col justify-center items-center mb-10'>
           <Text className='text-lg text-gray-300 font-bold mb-3'>SUMMARY</Text>
-          <Text className='text-3xl text-white font-bold mb-3'>{book.title}</Text>
+          <Text className='text-3xl text-white font-bold px-5 mb-3'>{book.title}</Text>
           <Text className='text-lg text-gray-300'>{book.author}</Text>
         </View>
 
@@ -93,7 +79,7 @@ const BookDetails = () => {
               router.push('/paywall')
             }
           }}
-          className='bg-zinc-800 items-center w-40 border border-gray-400/60 mx-auto py-5 px-4 mb-10 rounded-xl'
+          className='bg-[#13a2f5] items-center w-40 mx-auto py-5 px-4 mb-10 rounded-xl'
         >
           <Text className='text-white text-lg font-semibold'>Start reading</Text>
         </Pressable>
