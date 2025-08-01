@@ -8,6 +8,7 @@ import { RevenueCatContext } from '../../context/RevenueCatContext'
 import bookmark from '../../assets/icons/bookmark.png'
 import close from '../../assets/icons/close.png'
 import { BooksContext } from '../../context/BooksContext'
+import { AuthContext } from '../../context/AuthContext'
 
 const BookDetails = () => {
   const [book, setBook] = useState(null)
@@ -17,6 +18,7 @@ const BookDetails = () => {
   const { fetchSingleBook } = useContext(BooksContext)
   const { customerInfo } = useContext(RevenueCatContext)
   const { bookmarkedBooks, toggleBookmark } = useContext(BookmarkContext)
+  const { user } = useContext(AuthContext)
 
   const isBookmarked = book && bookmarkedBooks.some(b => b.id === book.id)
 
@@ -72,7 +74,8 @@ const BookDetails = () => {
 
         <Pressable 
           onPress={() => {
-            const hasAccess = customerInfo?.entitlements?.active?.premium_access
+            // const hasAccess = customerInfo?.entitlements?.active?.premium_access
+            const hasAccess = user?.email === "wilsongambit@gmail.com"
             if(hasAccess) {
               router.push(`/summary/${book.id}`)
             } else {

@@ -71,7 +71,7 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
       getInitialUserValue()
     }, [])
-
+    console.log(user)
     return (
       <AuthContext.Provider value={{user, signup, login, logout}}>
         {children}

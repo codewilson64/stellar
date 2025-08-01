@@ -9,8 +9,8 @@ import passwordIcon from '../../assets/icons/password.png'
 import googleIcon from '../../assets/icons/google.png'
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('wilsongambit@gmail.com')
+  const [password, setPassword] = useState('Test1234')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -69,7 +69,7 @@ const LoginScreen = () => {
           <View className='w-full flex-row items-center mb-5 border text-white border-gray-400/60 bg-zinc-800 rounded-lg px-5 py-4'>
             <Image source={passwordIcon} tintColor={'#13a2f5'} className='size-5 mr-2'/>
             <TextInput 
-              placeholder='Password'
+              placeholder='password'
               placeholderTextColor='#ccc'
               secureTextEntry
               className='flex-1 text-white'

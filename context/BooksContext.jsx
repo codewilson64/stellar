@@ -9,15 +9,14 @@ const CHAPTERS_COLLECTION_ID = '6815c854002efdadd675'
 
 const updateChaptersWithBookId = async () => {
   const chapters = [
-    { id: "6836da5f0026142eed9d", bookId: "683af23a002bbc7d123e" },
-    { id: "6836da0f000cd8258122", bookId: "683af23a002bbc7d123e" },
-    { id: "6836d970003247aabf8b", bookId: "683af23a002bbc7d123e" },
-    { id: "6836c3b10002bd72f252", bookId: "683af23a002bbc7d123e" },
-    { id: "6836c365001c8b861773", bookId: "683af23a002bbc7d123e" },
-    { id: "6836c2ce000c82661622", bookId: "683af23a002bbc7d123e" },
-    { id: "6836c23c000b8a1aba05", bookId: "683af23a002bbc7d123e" },
-    { id: "6836c1b1000c887a97f7", bookId: "683af23a002bbc7d123e" },
-    { id: "6836c11f0015cdb47a2d", bookId: "683af23a002bbc7d123e" },
+    { id: "6852991200222a796ff0", bookId: "68528a20001751c5e61c" },
+    { id: "6852986f001f1a4db856", bookId: "68528a20001751c5e61c" },
+    { id: "685297890021b88bd49c", bookId: "68528a20001751c5e61c" },
+    { id: "685296d9002ee5844ba1", bookId: "68528a20001751c5e61c" },
+    { id: "685295f00009ed2d58fc", bookId: "68528a20001751c5e61c" },
+    { id: "685294dd0012b21ffbd0", bookId: "68528a20001751c5e61c" },
+    { id: "68528f250021ea92bf4f", bookId: "68528a20001751c5e61c" },
+    { id: "68528e98002556a947c8", bookId: "68528a20001751c5e61c" },
   ];
 
   for (const { id, bookId } of chapters) {
@@ -43,6 +42,7 @@ export const BooksContextProvider = ({ children }) => {
   // Fetch Books
   const fetchBooks = async () => {
     try {
+      // Before fetch books, check if there is caches
       const cached = await AsyncStorage.getItem('cachedBooks')
       const lastFetch = await AsyncStorage.getItem('booksLastFetch')
 
@@ -55,6 +55,7 @@ export const BooksContextProvider = ({ children }) => {
         return
       }
 
+      // If no caches, then fetch books from database
       const response = await databases.listDocuments(
         DATABASE_ID,
         BOOKS_COLLECTION_ID,
@@ -73,7 +74,7 @@ export const BooksContextProvider = ({ children }) => {
         image: book.image
       }))
 
-      // Store to local storage to save read usage
+      // Store to local storage to save appwrite read usage
       await AsyncStorage.setItem('cachedBooks', JSON.stringify(trimmedBooks))
       await AsyncStorage.setItem('booksLastFetch', now.toString())
 
@@ -214,7 +215,9 @@ export const BooksContextProvider = ({ children }) => {
       const response = await databases.listDocuments(
         DATABASE_ID,
         BOOKS_COLLECTION_ID,
-        [Query.equal('category', category)]
+        [
+          Query.equal('category', category),
+        ]
       )
 
       // Cache only these fields (for performance)
@@ -239,8 +242,17 @@ export const BooksContextProvider = ({ children }) => {
   }, [])
 
   // useEffect(() => {
-  //   updateChaptersWithBookId()
+  //   updateChaptersWithBookId() 
   // }, [])
+
+//   useEffect(() => {
+//   const clearCache = async () => {
+//     await AsyncStorage.clear()
+//     console.log("Cache cleared on app start")
+//   }
+
+//   clearCache()
+// }, [])
 
   return (
     <BooksContext.Provider value={{books, fetchChapters, fetchSingleBook, fetchRandomCategory, fetchCategory}}>
