@@ -74,8 +74,7 @@ const BookDetails = () => {
 
         <Pressable 
           onPress={() => {
-            // const hasAccess = customerInfo?.entitlements?.active?.premium_access
-            const hasAccess = user?.email === "wilsongambit@gmail.com"
+            const hasAccess = user?.email === "wilsongambit@gmail.com" || customerInfo?.entitlements?.active?.premium_access
             if(hasAccess) {
               router.push(`/summary/${book.id}`)
             } else {

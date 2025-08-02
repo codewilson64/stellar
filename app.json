@@ -3,6 +3,7 @@
     "scheme": "stellar",
     "name": "stellar-app",
     "slug": "stellar-app",
+    "icon": "./assets/icons/logo.png",
     "version": "1.0.0",
     "runtimeVersion": {
       "policy": "appVersion"

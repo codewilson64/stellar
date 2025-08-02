@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { account } from '../lib/appwrite'
 import { ID } from "react-native-appwrite";
 import { useRouter } from "expo-router";
+import { Alert } from "react-native";
 
 export const AuthContext = createContext()
 
@@ -16,6 +17,7 @@ export const AuthContextProvider = ({ children }) => {
         const response = await account.get()
         setUser(response)
       } catch (error) {
+        console.error("Login Error:", error)
         let message = "Login failed."
 
         if (error.code === 400) {
@@ -52,11 +54,39 @@ export const AuthContextProvider = ({ children }) => {
         throw new Error(message)
       }
     }
+
      // logout
     const logout = async () => {
       await account.deleteSession("current")
       setUser(null)
       router.push('/login')
+    }
+
+    // deactivate account
+    const deactivateAccount = async () => {
+      try {
+        // Deactivate the account
+        await account.updateStatus()
+        console.log('Account deactivated successfully');
+
+        // Attempt to delete the session
+        try {
+          await account.deleteSession('current');
+          console.log('Session deleted successfully');
+        } catch (sessionError) {
+          console.warn('Failed to delete session (proceeding anyway):', sessionError.message);
+          // Continue even if session deletion fails
+        }
+
+        // Clear user state and navigate to homepage
+        setUser(null)
+        router.push('/')
+      } 
+      catch (error) {
+        console.log('failed deactivating account', error)
+        Alert.alert('Error', `Failed to deactivate account: ${error.message}`)
+        throw new Error(`failed deactivating account: ${error.message}`)
+      }
     }
 
     const getInitialUserValue = async () => {
@@ -71,9 +101,9 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
       getInitialUserValue()
     }, [])
-    console.log(user)
+
     return (
-      <AuthContext.Provider value={{user, signup, login, logout}}>
+      <AuthContext.Provider value={{user, signup, login, deactivateAccount, logout}}>
         {children}
       </AuthContext.Provider>
     )

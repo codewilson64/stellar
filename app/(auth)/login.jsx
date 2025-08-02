@@ -9,8 +9,8 @@ import passwordIcon from '../../assets/icons/password.png'
 import googleIcon from '../../assets/icons/google.png'
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState('wilsongambit@gmail.com')
-  const [password, setPassword] = useState('Test1234')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -93,6 +93,7 @@ const LoginScreen = () => {
             <Text className='text-white text-lg text-center font-semibold'>Continue with Google</Text>
           </Pressable> */}
 
+          {/* Error message */}
           <View className='w-full text-left'>
             {error && <Text className='text-red-500 mb-12'>{error}</Text>}
           </View>
