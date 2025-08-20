@@ -7,6 +7,7 @@ import logo from '../../assets/icons/logo.png'
 import emailIcon from '../../assets/icons/email.png' 
 import passwordIcon from '../../assets/icons/password.png'
 import googleIcon from '../../assets/icons/google.png'
+import { RevenueCatContext } from '../../context/RevenueCatContext'
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('')
@@ -16,6 +17,9 @@ const LoginScreen = () => {
 
   const router = useRouter()
   const { login } = useContext(AuthContext)
+  const { customerInfo } = useContext(RevenueCatContext)
+
+  const isTrial = customerInfo?.entitlements?.["premium_access"]?.periodType === 'trial';
 
   const handleLogin = async () => {
     setIsLoading(true)
@@ -39,7 +43,7 @@ const LoginScreen = () => {
             <Text className='text-2xl text-white font-bold mt-4 mb-4 text-center'>Stellar</Text>
           </View>
         
-          <Link href='/home' className='bg-zinc-800 rounded-lg px-4 py-3'>
+          <Link href={isTrial ? '/home' : '/freetrial'} className='bg-zinc-800 rounded-lg px-4 py-3'>
             <Text className='text-white font-semibold text-md'>Skip</Text>
           </Link>
         </View>

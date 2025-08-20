@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { View, Text, ActivityIndicator, Alert, Pressable, Image, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context'; 
 import { RevenueCatContext } from '../context/RevenueCatContext';
 import Purchases from 'react-native-purchases';
 import { useRouter } from 'expo-router';
@@ -7,7 +8,6 @@ import { useRouter } from 'expo-router';
 import logo from '../assets/icons/logo.png'
 import check from '../assets/icons/check.png'
 import close from '../assets/icons/close.png'
-import { SafeAreaView } from 'react-native-safe-area-context'; 
 
 export default function PaywallScreen() {
   const [selectedPlan, setSelectedPlan] = useState('monthly')

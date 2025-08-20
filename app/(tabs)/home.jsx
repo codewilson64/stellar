@@ -2,12 +2,13 @@ import { FlatList, Image, Pressable, ScrollView, Text, View, ActivityIndicator }
 import { useContext } from 'react'
 import { Link, useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
+import { BooksContext } from '../../context/BooksContext'
 
 import logo from '../../assets/icons/logo.png'
 import SelfGrowthSection from '../../components/SelfGrowthSection'
 import InvestmentsSection from '../../components/InvestmentsSection'
 import HealthSection from '../../components/HealthSection'
-import { BooksContext } from '../../context/BooksContext'
+import DailyFreeSummary from '../../components/DailyFreeSummary'
 
 const Home = () => {
   const { books } = useContext(BooksContext)
@@ -20,7 +21,8 @@ const Home = () => {
   return (
     <View className='flex-1 bg-blackPearl'>
       <View className='flex-1'>
-        
+
+        {/* Navbar */}
         <View className='flex-row justify-between items-center gap-2 border border-b-gray-600/50 border-l-0 border-r-0 border-t-0 px-5'>
           <View className='flex-row items-center gap-2'>
             <Image source={logo} className='size-10 rounded-full'/>
@@ -32,13 +34,18 @@ const Home = () => {
           </Link>
         </View>
 
+        {/* Main Content */}
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20}}
         >
+        
+        <View className='w-full px-5 mt-5 mb-10'>
+          <DailyFreeSummary />
+        </View>
 
         <View className='mb-10'>
-          <Text className='text-2xl text-white font-bold mt-3 mb-3 px-5'>Today for you</Text>
+          <Text className='text-2xl text-white font-bold mb-3 px-5'>Today for you</Text>
   
           <FlatList
             data={books}

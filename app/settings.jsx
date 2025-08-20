@@ -26,6 +26,7 @@ const SettingsScreen = () => {
   const router = useRouter()
 
   const hasAccess = customerInfo?.entitlements?.active?.premium_access
+  const isTrial = customerInfo?.entitlements?.["premium_access"]?.periodType === 'trial';
 
   const handleDeactivateAccount = async () => {
     setIsLoading(true)
@@ -81,7 +82,7 @@ const SettingsScreen = () => {
             </View>
           </Pressable>
           
-          {!hasAccess && (
+          {!hasAccess && !isTrial && (
             <Link href='/paywall' >
               <View className='flex-row items-center gap-3 py-3'>
                 <Image source={premium} className='size-7' tintColor={'#e9eaec'}/>

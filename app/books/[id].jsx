@@ -13,6 +13,7 @@ import { AuthContext } from '../../context/AuthContext'
 const BookDetails = () => {
   const [book, setBook] = useState(null)
   const { id } = useLocalSearchParams()
+  const { freeDaily } = useLocalSearchParams()
   const router = useRouter()
 
   const { fetchSingleBook } = useContext(BooksContext)
@@ -74,8 +75,11 @@ const BookDetails = () => {
 
         <Pressable 
           onPress={() => {
+            const isFromFreeDaily = freeDaily === 'true';
+            const isTrial = customerInfo?.entitlements?.["premium_access"]?.periodType === 'trial';
             const hasAccess = user?.email === "wilsongambit@gmail.com" || customerInfo?.entitlements?.active?.premium_access
-            if(hasAccess) {
+            
+            if(hasAccess || isTrial || isFromFreeDaily) {
               router.push(`/summary/${book.id}`)
             } else {
               router.push('/paywall')

@@ -16,7 +16,8 @@ export const AuthContextProvider = ({ children }) => {
         await account.createEmailPasswordSession(email, password)
         const response = await account.get()
         setUser(response)
-      } catch (error) {
+      } 
+      catch (error) {
         console.error("Login Error:", error)
         let message = "Login failed."
 
@@ -35,12 +36,14 @@ export const AuthContextProvider = ({ children }) => {
       try {
         await account.create(ID.unique(), email, password)
         await login(email, password)
-      } catch (error) {
+      } 
+      catch (error) {
         let message = "Signup failed."
 
         if (error.code === 409) {
           message = "This email is already registered."
-        } else if (error.code === 400) {
+        } 
+        else if (error.code === 400) {
           if (error.message.toLowerCase().includes("password")) {
             message = "Password must be at least 8 characters long."
           } else {
@@ -93,7 +96,8 @@ export const AuthContextProvider = ({ children }) => {
       try {
         const response = await account.get()
         setUser(response)
-      } catch (error) {
+      } 
+      catch (error) {
         setUser(null)
       }
     }

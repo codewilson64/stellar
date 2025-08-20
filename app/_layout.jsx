@@ -1,10 +1,10 @@
 import 'react-native-url-polyfill/auto'
 import './global.css'
 import { Stack } from 'expo-router'
+import { StatusBar } from 'react-native'
 import { BookmarkContextProvider } from '../context/BookmarkContext'
 import { AuthContextProvider } from '../context/AuthContext'
 import { RevenueCatProvider } from '../context/RevenueCatContext'
-import { StatusBar } from 'react-native'
 import { BooksContextProvider } from '../context/BooksContext'
 import { ThemeContextProvider } from '../context/ThemeContext'
 
@@ -21,6 +21,7 @@ const RootLayout = () => {
                 <Stack.Screen name='onboarding' options={{headerShown: false}}/>
                 <Stack.Screen name='index' options={{headerShown: false}}/>
                 <Stack.Screen name='paywall' options={{headerShown: false}}/>
+                <Stack.Screen name='freetrial' options={{headerShown: false}}/>
                 <Stack.Screen name='settings' options={{headerShown: false}}/>
                 <Stack.Screen name='(auth)' options={{headerShown: false}}/>
                 <Stack.Screen name='(tabs)' options={{headerShown: false}}/>

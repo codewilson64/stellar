@@ -42,7 +42,7 @@ const OnboardingScreen = () => {
      
       {/* Top Content */}
       <View className='flex-1 justify-center items-center'>
-        <Image source={onboardingImage}  className='w-96 h-96 rounded-xl'/>       
+        <Image source={onboardingImage} className='w-96 h-96 rounded-xl'/>       
       </View>
       
       {/* Animated Messages */}
