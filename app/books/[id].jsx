@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, Pressable, ActivityIndicator } from 'react-native'
+import { View, Text, Image, ScrollView, Pressable, ActivityIndicator, SafeAreaView } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useContext, useEffect, useState } from 'react'
 
@@ -23,6 +23,11 @@ const BookDetails = () => {
 
   const isBookmarked = book && bookmarkedBooks.some(b => b.id === book.id)
 
+  const isFromFreeDaily = freeDaily === 'true';
+  // const isTrial = customerInfo?.entitlements?.["premium_access"]?.periodType === 'trial';
+  const hasAccess = user?.email === "wilsongambit@gmail.com" || customerInfo?.entitlements?.active?.premium_access
+  console.log('Has access: ', hasAccess?.isActive)
+
   useEffect(() => {
     const loadBook = async () => {
       const data = await fetchSingleBook(id)
@@ -39,10 +44,10 @@ const BookDetails = () => {
   }
 
   return (
-    <View className='flex-1 bg-blackPearl'>
+    <SafeAreaView className='flex-1 bg-blackPearl'>
       <ScrollView contentContainerStyle={{paddingBottom: 0}}>
 
-        <View className='flex-row justify-between w-full px-5 mt-8 mb-6'>  
+        <View className='flex-row justify-between w-full px-5 pt-6 mb-6'>  
           <Pressable onPress={router.back}>
             <Image source={close} style={{tintColor: 'gray'}} className='size-8'/>          
           </Pressable>
@@ -75,11 +80,7 @@ const BookDetails = () => {
 
         <Pressable 
           onPress={() => {
-            const isFromFreeDaily = freeDaily === 'true';
-            const isTrial = customerInfo?.entitlements?.["premium_access"]?.periodType === 'trial';
-            const hasAccess = user?.email === "wilsongambit@gmail.com" || customerInfo?.entitlements?.active?.premium_access
-            
-            if(hasAccess || isTrial || isFromFreeDaily) {
+            if(hasAccess || isFromFreeDaily) {
               router.push(`/summary/${book.id}`)
             } else {
               router.push('/paywall')
@@ -91,7 +92,7 @@ const BookDetails = () => {
         </Pressable>
 
       </ScrollView>
-    </View>
+    </SafeAreaView>
   )
 }
 

@@ -1,4 +1,4 @@
-import { FlatList, Image, Pressable, ScrollView, Text, View, ActivityIndicator } from 'react-native'
+import { FlatList, Image, Pressable, ScrollView, Text, View, ActivityIndicator, SafeAreaView } from 'react-native'
 import { useContext } from 'react'
 import { Link, useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
@@ -19,14 +19,14 @@ const Home = () => {
   }
 
   return (
-    <View className='flex-1 bg-blackPearl'>
+    <SafeAreaView className='flex-1 bg-blackPearl'>
       <View className='flex-1'>
 
         {/* Navbar */}
-        <View className='flex-row justify-between items-center gap-2 border border-b-gray-600/50 border-l-0 border-r-0 border-t-0 px-5'>
+        <View className='flex-row justify-between items-center gap-2 border border-b-gray-600/50 border-l-0 border-r-0 border-t-0 px-5 pt-6 pb-3'>
           <View className='flex-row items-center gap-2'>
             <Image source={logo} className='size-10 rounded-full'/>
-            <Text className='text-2xl text-white font-bold mt-4 mb-4 text-center'>Stellar</Text>
+            <Text className='text-2xl text-white font-bold text-center'>Stellar</Text>
           </View>
 
           <Link href='/settings'>
@@ -77,7 +77,7 @@ const Home = () => {
 
         </ScrollView>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 

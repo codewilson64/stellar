@@ -43,7 +43,7 @@ const LoginScreen = () => {
             <Text className='text-2xl text-white font-bold mt-4 mb-4 text-center'>Stellar</Text>
           </View>
         
-          <Link href={isTrial ? '/home' : '/freetrial'} className='bg-zinc-800 rounded-lg px-4 py-3'>
+          <Link href='/home' className='bg-zinc-800 rounded-lg px-4 py-3'>
             <Text className='text-white font-semibold text-md'>Skip</Text>
           </Link>
         </View>

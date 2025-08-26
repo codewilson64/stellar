@@ -54,7 +54,7 @@ export const BooksContextProvider = ({ children }) => {
       const deviceId = await DeviceInfo.getUniqueId();
       console.log('Device ID:', deviceId)
 
-      const oneDay = 24 * 60 * 60 * 1000
+      const oneDay = 2 * 24 * 60 * 60 * 1000
 
       // Step 2: Check for cached book in Appwrite
       let cachedBookDoc;
@@ -92,7 +92,7 @@ export const BooksContextProvider = ({ children }) => {
       const response = await databases.listDocuments(
         DATABASE_ID,
         BOOKS_COLLECTION_ID,
-        [Query.orderDesc('$createdAt'), Query.limit(30)]
+        [Query.orderDesc('$createdAt'), Query.limit(50)]
       );
       const shuffled = response.documents.sort(() => 0.5 - Math.random());
       const randomBook = shuffled[0];

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { View, Text, ActivityIndicator, Alert, Pressable, Image, ScrollView } from 'react-native';
+import { View, Text, ActivityIndicator, Alert, Pressable, Image, ScrollView, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'; 
 import { RevenueCatContext } from '../context/RevenueCatContext';
 import Purchases from 'react-native-purchases';
@@ -8,13 +8,29 @@ import { useRouter } from 'expo-router';
 import logo from '../assets/icons/logo.png'
 import check from '../assets/icons/check.png'
 import close from '../assets/icons/close.png'
+import x from '../assets/icons/x.png'
 
 export default function PaywallScreen() {
-  const [selectedPlan, setSelectedPlan] = useState('monthly')
+  const [openModal, setOpenModal] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState('annual')
   const { offerings, purchase } = useContext(RevenueCatContext)
   const [isLoading, setIsLoading] = useState(false)
 
   const router = useRouter()
+
+  const annualIntro = offerings?.current?.availablePackages.find(
+    (pkg) => pkg.identifier === "$rc_annual_intro"
+  );
+
+  const annual = offerings?.current?.annual;
+  const threeMonth = offerings?.current?.threeMonth;
+  const monthly = offerings?.current?.monthly;
+
+  const selectedPackage = selectedPlan === 'annual'
+  ? annual
+  : selectedPlan === 'monthly'
+  ? monthly
+  : threeMonth;
 
   const handlePurchase = async (pkg) => {
     try {
@@ -56,32 +72,19 @@ export default function PaywallScreen() {
     }
   }
 
-  const weekly = offerings?.current?.weekly;
-  const monthly = offerings?.current?.monthly;
-  const annual = offerings?.current?.annual;
-
-  const selectedPackage = selectedPlan === 'weekly'
-  ? weekly
-  : selectedPlan === 'monthly'
-  ? monthly
-  : annual;
-
-  if (!offerings || !weekly || !monthly || !annual) {
+  if (!offerings || !annualIntro || !threeMonth || !monthly || !annual) {
     console.log("Waiting for offerings...");
     return <ActivityIndicator size="large" className='flex-1 justify-center'/>;
   }
 
   return (
     <SafeAreaView className='flex-1 bg-blackPearl'>
-      <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 40 }}
-        showsVerticalScrollIndicator={false}
-      >
-      <View className="py-3 flex-row items-center">
-        <Pressable onPress={router.back}>
-          <Image source={close} style={{ tintColor: 'gray' }} className="size-8" />
-        </Pressable>
-      </View>
+      <View className='px-5'>
+        <View className="py-3 flex-row items-center">
+          <Pressable onPress={router.back}>
+            <Image source={close} style={{ tintColor: 'gray' }} className="size-8" />
+          </Pressable>
+        </View>
       
         <View className='flex-col items-center gap-8 mt-5'>
           <Image source={logo} className='size-32 rounded-full'/>
@@ -102,62 +105,116 @@ export default function PaywallScreen() {
             </View>
           </View>
         </View>
-      
-        <View className='w-full flex-col gap-5 mt-10'>
-        <Pressable 
-            onPress={() => setSelectedPlan('weekly')}
-            className={`w-full ${selectedPlan === 'weekly' ? 'border-[#13a2f5]' : 'border-gray-400/60'} border mx-auto py-4 px-4 rounded-xl`}>
-            <View className='flex-row items-center gap-3'>            
-              <View>
-                <Text className='font-bold text-xl text-white'>Weekly</Text>
-                <Text className='text-white text-lg'>{weekly.product.priceString}/week</Text>
-              </View>
-            </View>
-          </Pressable>
 
-          <Pressable 
-            onPress={() => setSelectedPlan('monthly')}
-            className={`relative overflow-hidden w-full ${selectedPlan === 'monthly' ? 'border-[#13a2f5]' : 'border-gray-400/60'} border mx-auto py-4 px-4 rounded-xl`}>
-            <View className='flex-row items-center gap-3'>       
-              <View>
-                <Text className='font-bold text-xl text-white'>Monthly</Text>
-                <Text className='text-white text-lg'>{monthly.product.priceString}/month</Text>
-              </View>
-            </View>
-
-            <View className={`absolute ${selectedPlan === 'monthly' ? 'bg-[#13a2f5]' : 'bg-gray-400/60'} right-0 top-0 p-2 rounded-bl-xl`}>
-              <Text className='text-md text-white font-semibold'>POPULAR - SAVE 32%</Text>
-            </View>
-          </Pressable>
-
-          <Pressable 
-            onPress={() => setSelectedPlan('annual')}
-            className={`relative overflow-hidden w-full ${selectedPlan === 'annual' ? 'border-[#13a2f5]' : 'border-gray-400/60'} border mx-auto py-4 px-4 rounded-xl`}>
-            <View className='flex-row items-center gap-3'>         
-              <View>
-                <Text className='font-bold text-xl text-white'>Yearly</Text>
-                <Text className='text-white text-lg'>{annual.product.priceString}/year</Text>
-              </View>
-            </View>
-
-            <View className={`absolute ${selectedPlan === 'annual' ? 'bg-[#13a2f5]' : 'bg-gray-400/60'} right-0 top-0 p-2 rounded-bl-xl`}>
-              <Text className='text-md text-white font-semibold'>BEST VALUE - SAVE 50%</Text>
-            </View>
-          </Pressable>
-
-          <Pressable 
-            disabled={isLoading}
-            onPress={() => handlePurchase(selectedPackage)}
-            className='w-full bg-[#13a2f5] items-center py-5 px-4 rounded-xl'>
-              {isLoading ? (
-                <ActivityIndicator size="small" color="white" />
-              ): (
-                <Text className='text-white text-xl font-semibold'>Continue</Text>
-              )}
+        <View className='flex-col gap-7 mt-20'>
+          <View>
+            <Text className='text-white text-lg text-center'>
+              Subscribe for {annualIntro.product.priceString}/year
+            </Text>
+            <Text className='text-gray-300/60 text-lg text-center'>
+              Only {annualIntro.product.pricePerWeekString}/week
+            </Text>
+          </View>
+        
+            <Pressable 
+                disabled={isLoading}
+                onPress={() => handlePurchase(annualIntro)}
+                className='w-full bg-[#13a2f5] items-center py-5 px-4 rounded-xl'>
+                {isLoading ? (
+                    <ActivityIndicator size="small" color="white" />
+                ): (
+                    <Text className='text-white text-xl font-semibold'>Subscribe</Text>
+                )}
+            </Pressable>
+            
+          <Pressable onPress={() => setOpenModal(true)}>
+            <Text className='text-lg text-center font-semibold text-gray-300/60'>View other plans</Text>
           </Pressable>
         </View>
-      
-      </ScrollView>     
+
+        {/* Modal */}
+        <Modal 
+          visible={openModal} 
+          onRequestClose={() => setOpenModal(false)}
+          animationType='slide'
+          transparent
+        >
+          <View className="flex-1 justify-end bg-black/30">
+            <View className='w-full flex-col gap-5 p-5 bg-matteBlack rounded-t-2xl'>
+              <View className='flex-row justify-between items-center'>
+                <Text className='text-white text-xl font-semibold'>Pick your plan</Text>
+                <Pressable onPress={() => setOpenModal(false)}>
+                  <Image source={x} style={{ tintColor: 'gray' }} className="size-5" />
+                </Pressable>
+              </View>
+                <Pressable 
+                  onPress={() => setSelectedPlan('annual')}
+                  className={`relative overflow-hidden w-full ${selectedPlan === 'annual' ? 'border-[#13a2f5]' : 'border-gray-400/60'} border mx-auto py-4 px-4 rounded-xl`}>
+                    <View className='flex-row justify-between items-end gap-3'>         
+                      <View>
+                        <Text className='font-bold text-xl text-white'>Yearly</Text>
+                        <Text className='text-white text-lg'>{annual.product.priceString}</Text>
+                      </View>
+                      <View>
+                        <Text className='text-gray-300/60 text-sm'>{annual.product.pricePerWeekString}/week</Text>
+                      </View>
+                    </View>
+
+                    <View className={`absolute ${selectedPlan === 'annual' ? 'bg-[#13a2f5]' : 'bg-gray-400/60'} right-0 top-0 p-2 rounded-bl-xl`}>
+                      <Text className='text-md text-white font-semibold'>BEST VALUE - SAVE 45%</Text>
+                    </View>
+                </Pressable>
+
+                <Pressable 
+                  onPress={() => setSelectedPlan('threeMonth')}
+                  className={`relative overflow-hidden w-full ${selectedPlan === 'threeMonth' ? 'border-[#13a2f5]' : 'border-gray-400/60'} border mx-auto py-4 px-4 rounded-xl`}>
+                    <View className='flex-row justify-between items-end gap-3'>            
+                      <View>
+                        <Text className='font-bold text-xl text-white'>3-Month</Text>
+                        <Text className='text-white text-lg'>{threeMonth.product.priceString}</Text>
+                      </View>
+                      <View>
+                        <Text className='text-gray-300/60 text-sm'>{threeMonth.product.pricePerWeekString}/week</Text>
+                      </View>
+                    </View>
+
+                    <View className={`absolute ${selectedPlan === 'threeMonth' ? 'bg-[#13a2f5]' : 'bg-gray-400/60'} right-0 top-0 p-2 rounded-bl-xl`}>
+                      <Text className='text-md text-white font-semibold'>SAVE 23%</Text>
+                    </View>
+                </Pressable>
+
+                <Pressable 
+                  onPress={() => setSelectedPlan('monthly')}
+                  className={`relative overflow-hidden w-full ${selectedPlan === 'monthly' ? 'border-[#13a2f5]' : 'border-gray-400/60'} border mx-auto py-4 px-4 rounded-xl`}>
+                    <View className='flex-row justify-between items-end gap-3'>       
+                      <View>
+                        <Text className='font-bold text-xl text-white'>Monthly</Text>
+                        <Text className='text-white text-lg'>{monthly.product.priceString}</Text>
+                      </View>
+                      <View>
+                        <Text className='text-gray-300/60 text-sm'>{monthly.product.pricePerWeekString}/week</Text>
+                      </View>
+                    </View>
+
+                    <View className={`absolute ${selectedPlan === 'monthly' ? 'bg-[#13a2f5]' : 'bg-gray-400/60'} right-0 top-0 p-2 rounded-bl-xl`}>
+                      <Text className='text-md text-white font-semibold'>POPULAR</Text>
+                    </View>
+                </Pressable>
+
+                <Pressable 
+                  disabled={isLoading}
+                  onPress={() => handlePurchase(selectedPackage)}
+                  className='w-full bg-[#13a2f5] items-center py-5 px-4 rounded-xl'>
+                    {isLoading ? (
+                        <ActivityIndicator size="small" color="white" />
+                    ): (
+                        <Text className='text-white text-xl font-semibold'>Continue</Text>
+                    )}
+                </Pressable>
+              </View>
+            </View>
+        </Modal>
+      </View>     
     </SafeAreaView>
   );
 }

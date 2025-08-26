@@ -36,7 +36,7 @@ const DailyFreeSummary = () => {
     >
       <View className='flex-row items-center justify-between'>
         <View className='w-[70%] flex-col gap-7'>
-          <Text className='text-4xl text-white font-bold'>Free daily summary</Text>
+          <Text className='text-3xl text-white font-bold'>Free summary today</Text>
           <View className='flex-row items-center gap-3'>
             <Text className='text-lg text-white font-normal'>Read it now</Text>
             <Image source={next} className='size-4' tintColor={'white'}/>

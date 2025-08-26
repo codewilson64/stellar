@@ -82,14 +82,14 @@ const SettingsScreen = () => {
             </View>
           </Pressable>
           
-          {!hasAccess && !isTrial && (
+          {/* {!hasAccess && !isTrial && (
             <Link href='/paywall' >
               <View className='flex-row items-center gap-3 py-3'>
                 <Image source={premium} className='size-7' tintColor={'#e9eaec'}/>
                 <Text className='text-gray-300 text-xl font-semibold'>Upgrade to Premium</Text>            
               </View>
             </Link>
-          )}
+          )} */}
           
         </View>
       </View>

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { ActivityIndicator, Image, Pressable, ScrollView, Text, View } from 'react-native'
+import { ActivityIndicator, Alert, Image, Pressable, ScrollView, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import { RevenueCatContext } from '../context/RevenueCatContext'
@@ -20,6 +20,9 @@ const freetrial = () => {
   const isTrial = customerInfo?.entitlements?.["premium_access"]?.periodType === 'trial';
   console.log( 'isTrial: ' , isTrial)
   console.log(monthly?.product?.introPrice.period)
+
+  const monthly = offerings?.current?.monthly;
+  console.log("Monthly Product", monthly)
   
   const handleFreeTrial = async () => {
       try {
@@ -64,8 +67,6 @@ const freetrial = () => {
         }
       }
     }
-
-  const monthly = offerings?.current?.monthly;
 
   return (
     <SafeAreaView className='flex-1 bg-blackPearl'>
