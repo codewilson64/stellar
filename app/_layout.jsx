@@ -21,6 +21,7 @@ const RootLayout = () => {
                 <Stack.Screen name='onboarding' options={{headerShown: false}}/>
                 <Stack.Screen name='index' options={{headerShown: false}}/>
                 <Stack.Screen name='paywall' options={{headerShown: false}}/>
+                <Stack.Screen name='expires' options={{headerShown: false}}/>
                 <Stack.Screen name='freetrial' options={{headerShown: false}}/>
                 <Stack.Screen name='settings' options={{headerShown: false}}/>
                 <Stack.Screen name='(auth)' options={{headerShown: false}}/>

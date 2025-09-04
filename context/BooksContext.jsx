@@ -18,14 +18,14 @@ const FREE_BOOK_CACHE_COLLECTION_ID = '68a15948003dbfe1be1f'
 
 const updateChaptersWithBookId = async () => {
   const chapters = [
-    { id: "68a32637003d3336c56f", bookId: "68a301000038a77d62be" },
-    { id: "68a325680019cc0a9c6e", bookId: "68a301000038a77d62be" },
-    { id: "68a32171001e4715213a", bookId: "68a301000038a77d62be" },
-    { id: "68a3201a0007b03db68b", bookId: "68a301000038a77d62be" },
-    { id: "68a31dde001fda76d85c", bookId: "68a301000038a77d62be" },
-    { id: "68a31d050036f8d998eb", bookId: "68a301000038a77d62be" },
-    { id: "68a31b3b002978b7a1c6", bookId: "68a301000038a77d62be" },
-    { id: "68a302b600136e641e52", bookId: "68a301000038a77d62be" },
+    { id: "68b935f2001a10403c2e", bookId: "68b96eba0009ce82eb04" },
+    { id: "68b935200038706fc563", bookId: "68b96eba0009ce82eb04" },
+    { id: "68b932380011d984301b", bookId: "68b96eba0009ce82eb04" },
+    { id: "68b93016000c91281781", bookId: "68b96eba0009ce82eb04" },
+    { id: "68b928ab002c7810711e", bookId: "68b96eba0009ce82eb04" },
+    { id: "68b922f40005a99f8e76", bookId: "68b96eba0009ce82eb04" },
+    { id: "68b91fe2002a437b69cc", bookId: "68b96eba0009ce82eb04" },
+    { id: "68b919c1002719ad7b8b", bookId: "68b96eba0009ce82eb04" },
   ];
 
   for (const { id, bookId } of chapters) {
@@ -245,7 +245,8 @@ export const BooksContextProvider = ({ children }) => {
         title: response.title,
         author: response.author,
         image: response.image,
-        description: response.description
+        description: response.description,
+        chapters: response.chapters ? response.chapters.map(chapter => ({ title: chapter.title })) : []
       }
 
       // Store to local storage to save read usage

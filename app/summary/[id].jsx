@@ -13,12 +13,13 @@ const { width } = Dimensions.get('window')
 
 const SummaryDetails = () => {
   const [summary, setSummary] = useState(null)
-  const flatListRef = useRef(null)
-
   const { id } = useLocalSearchParams()
+  const flatListRef = useRef(null)
+  const router = useRouter()
+
   const { fetchChapters } = useContext(BooksContext)
   const { theme, toggleTheme } = useContext(ThemeContext)
-  const router = useRouter()
+
   const isDark = theme === 'dark'
   
   useEffect(() => {
@@ -70,11 +71,11 @@ const SummaryDetails = () => {
             contentContainerStyle={{ paddingTop: 20, paddingBottom: 100 }}
             showsVerticalScrollIndicator={false}
           >
-            <Text style={{ color: isDark ? '#E5E7EB' : '#000', fontSize: 26, fontWeight: 'bold', marginBottom: 16 }} className='leading-snug'>
+            <Text style={{ color: isDark ? '#E5E7EB' : '#000', fontSize: 26, fontWeight: 'bold', marginBottom: 16, fontFamily: 'georgia' }} className='leading-snug'>
               {item.title}
             </Text>
             <View pointerEvents='auto'>
-              <Text style={{ color: isDark ? '#E5E7EB' : '#000', fontSize: 18 }} className='leading-relaxed' selectable={true}>
+              <Text style={{ color: isDark ? '#E5E7EB' : '#000', fontSize: 18, fontFamily: 'georgia' }} className='leading-relaxed' selectable={true}>
                 {item.summary}
               </Text>
             </View>

@@ -1,6 +1,6 @@
 import { Link, useRouter } from 'expo-router'
 import { View, Text, TextInput, Image, TouchableWithoutFeedback, Keyboard, Pressable, ActivityIndicator } from 'react-native'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 
 import logo from '../../assets/icons/logo.png'
@@ -19,8 +19,6 @@ const LoginScreen = () => {
   const { login } = useContext(AuthContext)
   const { customerInfo } = useContext(RevenueCatContext)
 
-  const isTrial = customerInfo?.entitlements?.["premium_access"]?.periodType === 'trial';
-
   const handleLogin = async () => {
     setIsLoading(true)
     setError(null)
@@ -33,6 +31,22 @@ const LoginScreen = () => {
     }
   }
 
+  const skipDestination = () => {
+    if (!customerInfo) return null;
+
+    // Show freetrial only once in a lifetime (never again after they used trial, even if expired)
+    const entitlement = customerInfo.entitlements?.all?.['premium_access'];
+
+    // If user never had premium or trial → send to freetrial
+    if (!entitlement) {
+      return '/freetrial';
+    }
+
+    // If they currently have trial, premium, or had trial/premium before → always home
+    return '/home';
+  };
+
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View className='flex-1 bg-blackPearl'>
@@ -43,9 +57,18 @@ const LoginScreen = () => {
             <Text className='text-2xl text-white font-bold mt-4 mb-4 text-center'>Stellar</Text>
           </View>
         
-          <Link href='/home' className='bg-zinc-800 rounded-lg px-4 py-3'>
-            <Text className='text-white font-semibold text-md'>Skip</Text>
-          </Link>
+          {customerInfo ? (
+            <Pressable
+              onPress={() => router.replace(skipDestination())}
+              className="bg-zinc-800 rounded-lg px-4 py-3"
+            >
+              <Text className="text-white font-semibold text-md">Skip</Text>
+            </Pressable>
+          ) : (
+            <View className="bg-zinc-800 rounded-lg px-4 py-3">
+              <ActivityIndicator size="small" color="#13a2f5" />
+            </View>
+          )}
         </View>
 
         <View className='flex-1 justify-center px-10 bg-blackPearl'>

@@ -1,14 +1,17 @@
 import { useContext, useState } from 'react';
-import { View, Text, ActivityIndicator, Alert, Pressable, Image, ScrollView, Modal } from 'react-native';
+import { View, Text, ActivityIndicator, Alert, Pressable, Image, ScrollView, Modal, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'; 
 import { RevenueCatContext } from '../context/RevenueCatContext';
 import Purchases from 'react-native-purchases';
-import { useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 
 import logo from '../assets/icons/logo.png'
 import check from '../assets/icons/check.png'
 import close from '../assets/icons/close.png'
 import x from '../assets/icons/x.png'
+
+const PRIVACY_POLICY_URL = 'https://withstellar.vercel.app/privacypolicy'
+const TERMS_URL = 'https://withstellar.vercel.app/termsofuse'
 
 export default function PaywallScreen() {
   const [openModal, setOpenModal] = useState(false)
@@ -79,6 +82,7 @@ export default function PaywallScreen() {
 
   return (
     <SafeAreaView className='flex-1 bg-blackPearl'>
+      <ScrollView contentContainerStyle={{paddingBottom: 40}}>
       <View className='px-5'>
         <View className="py-3 flex-row items-center">
           <Pressable onPress={router.back}>
@@ -88,27 +92,27 @@ export default function PaywallScreen() {
       
         <View className='flex-col items-center gap-8 mt-5'>
           <Image source={logo} className='size-32 rounded-full'/>
-          <Text className='font-bold text-white text-3xl'>Upgrade to Stellar Premium</Text>
+          <Text className='font-bold text-[#E5E7EB] text-3xl'>Upgrade to Stellar Premium</Text>
 
           <View className='flex-col w-full gap-3'>
             <View className='flex-row items-center gap-3'>
               <Image source={check} className='size-5' />
-              <Text className='text-lg font-semibold text-white'>Unlock all book summaries</Text>
+              <Text className='text-lg font-semibold text-[#E5E7EB]'>Unlock all book summaries</Text>
             </View>
             <View className='flex-row items-center gap-3'>
               <Image source={check} className='size-5' />
-              <Text className='text-lg font-semibold text-white'>10-min summaries, daily new releases</Text>
+              <Text className='text-lg font-semibold text-[#E5E7EB]'>10-min summaries, daily new releases</Text>
             </View>
             <View className='flex-row items-center gap-3'>
               <Image source={check} className='size-5'/>
-              <Text className='text-lg font-semibold text-white'>Read anytime & anywhere</Text>
+              <Text className='text-lg font-semibold text-[#E5E7EB]'>Read anytime & anywhere</Text>
             </View>
           </View>
         </View>
 
         <View className='flex-col gap-7 mt-20'>
           <View>
-            <Text className='text-white text-lg text-center'>
+            <Text className='text-[#E5E7EB] text-lg text-center'>
               Subscribe for {annualIntro.product.priceString}/year
             </Text>
             <Text className='text-gray-300/60 text-lg text-center'>
@@ -127,11 +131,20 @@ export default function PaywallScreen() {
                 )}
             </Pressable>
             
-          <Pressable onPress={() => setOpenModal(true)}>
+          <Pressable onPress={() => setOpenModal(true)} className='mb-24'>
             <Text className='text-lg text-center font-semibold text-gray-300/60'>View other plans</Text>
           </Pressable>
-        </View>
 
+          <View className='flex-row items-center justify-center gap-28 pt-3 border-t border-gray-600/50'> 
+            <Pressable onPress={() => Linking.openURL(TERMS_URL)}>
+              <Text className='text-[#E5E7EB] text-sm font-normal'>Terms & Conditions</Text>
+            </Pressable>
+            <Pressable onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}>
+              <Text className='text-[#E5E7EB] text-sm font-normal'>Privacy Policy</Text>
+            </Pressable>
+          </View>
+        </View>
+                
         {/* Modal */}
         <Modal 
           visible={openModal} 
@@ -215,6 +228,7 @@ export default function PaywallScreen() {
             </View>
         </Modal>
       </View>     
+      </ScrollView>
     </SafeAreaView>
   );
 }

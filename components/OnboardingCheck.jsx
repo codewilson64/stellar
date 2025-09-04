@@ -1,27 +1,59 @@
 import { useRouter } from 'expo-router'
-import { useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { View, Text, Image} from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RevenueCatContext } from '../context/RevenueCatContext';
 import { MotiView } from 'moti';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import logo from '../assets/icons/logo.png' 
 
 const OnboardingCheck = () => {
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(true)
+  const { customerInfo } = useContext(RevenueCatContext)
 
   useEffect(() => {
-    const timeout = setTimeout (async () => {
-      const hasSeen = await AsyncStorage.getItem('hasSeenOnboarding')
-      if(hasSeen === 'true') {
-        router.replace('/home')
-      }
-      else {
-        router.replace('/onboarding')
-      }
-    }, 1000)
-    
-    return () => clearTimeout(timeout)
-  }, [])
+    const checkFlow = async () => {
+      try {
+        const hasSeen = await AsyncStorage.getItem('hasSeenOnboarding')
+
+        if (hasSeen !== 'true') {
+          router.replace('/onboarding')
+          return
+        }
+
+        // wait until customerInfo is fetched
+        if (!customerInfo) return
+
+        const entitlement = customerInfo?.entitlements?.all?.['premium_access'];
+        const activeEntitlement = customerInfo?.entitlements?.active?.['premium_access'];
+
+        // Brand new user → never had entitlement
+        if (!entitlement) {
+          router.replace('/freetrial');
+          return;
+        }
+
+        // Currently active (trial or paid)
+        if (activeEntitlement) {
+          router.replace('/home');
+          return;
+        }
+
+        // If entitlement exists but not active → trial ended or subscription expired
+        router.replace('/expires');
+          } finally {
+            setIsLoading(false)
+          }
+        }
+
+      const timeout = setTimeout(checkFlow, 1000)
+      return () => clearTimeout(timeout)
+  }, [customerInfo])
+
+  if (isLoading) {
+    return null // or show a splash/loading screen
+  }
 
   return (
     <View className="flex-1 justify-center items-center bg-blackPearl">
@@ -37,5 +69,4 @@ const OnboardingCheck = () => {
     </View>
   )
 }
-
 export default OnboardingCheck
